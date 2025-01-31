@@ -6,7 +6,7 @@ import LatestIssues from "./LatestIssues";
 
 
 
-export default async function Home({searchParams}:{searchParams:{page:string}}) {
+export default async function Home() {
 
   const open = await prisma.issue.count({where:{status:'OPEN'}});
   const inProgress = await prisma.issue.count({where:{status:"In_PROGRESS"}});

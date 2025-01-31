@@ -5,16 +5,17 @@ import delay from 'delay';
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(request:NextRequest,{params}: {params:{id:string}}) {
+export async function PATCH(request:NextRequest, props: {params: Promise<{id:string}>}) {
+    const params = await props.params;
     const sessions = await getServerSession(authOptions);
-    
-        if(!sessions)
-            return NextResponse.json({}, {status:401})
-    
+
+    if(!sessions)
+        return NextResponse.json({}, {status:401})
+
     const body = await request.json()
 
     const validation = patchIssueSchema.safeParse(body);
-    
+
     if(!validation.success)
         return NextResponse.json(validation.error.format(),{status: 400})
 
@@ -42,11 +43,12 @@ export async function PATCH(request:NextRequest,{params}: {params:{id:string}}) 
             assignedToUserId
         }
     })
-    
+
     return NextResponse.json(updateIssue);
 }
 
-export async function DELETE(request:NextRequest,{params}:{params:{id:string}}){
+export async function DELETE(request:NextRequest, props:{params: Promise<{id:string}>}) {
+    const params = await props.params;
 
     const sessions = await getServerSession(authOptions);
 
@@ -68,5 +70,4 @@ export async function DELETE(request:NextRequest,{params}:{params:{id:string}}){
     })
 
     return NextResponse.json({})
-
 }

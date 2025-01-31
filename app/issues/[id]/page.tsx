@@ -8,10 +8,11 @@ import DeleteIssueButton from "./DeleteIssueButton";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
 
-const IssuesDetailPage = async ({ params }: { params: { id: string } }) => {
+const IssuesDetailPage = async (props: { params: Promise<{ id: string }> }) => {
+    const params = await props.params;
 
     const sessions = await getServerSession(authOptions);
-    
+
 
     const issue = await prisma.issue.findUnique({
         where: { id: parseInt(params.id) },
